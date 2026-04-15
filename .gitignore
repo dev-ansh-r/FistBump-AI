@@ -1,0 +1,54 @@
+# ── Secrets / local config ──────────────────────────────────────────────
+apikeys.md
+credentials.json
+.env
+.env.local
+*.pem
+
+# ── Python ──────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+.venv/
+venv/
+env/
+
+# ── Node / Vite ─────────────────────────────────────────────────────────
+node_modules/
+rocky/ui/dist/
+rocky/ui/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Rust / Tauri ────────────────────────────────────────────────────────
+# target/ is huge (build artifacts); never commit it.
+rocky/ui/src-tauri/target/
+rocky/ui/src-tauri/gen/schemas/
+rocky/ui/src-tauri/WixTools/
+
+# Keep Cargo.lock — Rocky is an app, not a library, so locking deps is correct.
+!rocky/ui/src-tauri/Cargo.lock
+
+# ── IDE / editor ────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── OS junk ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Rocky local state (lives in ~/.rocky/ — just in case) ───────────────
+.rocky/

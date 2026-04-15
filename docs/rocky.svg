@@ -1,0 +1,41 @@
+<svg width="180" height="180" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bodyGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="60%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ambient glow -->
+  <circle cx="60" cy="60" r="56" fill="url(#glow)"/>
+
+  <!-- five limbs radiating -->
+  <g stroke="#d97706" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M60 60 L18 26"/>
+    <path d="M60 60 L14 72"/>
+    <path d="M60 60 L60 108"/>
+    <path d="M60 60 L106 72"/>
+    <path d="M60 60 L102 26"/>
+  </g>
+
+  <!-- limb tips -->
+  <g fill="#92400e">
+    <circle cx="18"  cy="26"  r="3.5"/>
+    <circle cx="14"  cy="72"  r="3.5"/>
+    <circle cx="60"  cy="108" r="3.5"/>
+    <circle cx="106" cy="72"  r="3.5"/>
+    <circle cx="102" cy="26"  r="3.5"/>
+  </g>
+
+  <!-- central body -->
+  <circle cx="60" cy="60" r="18" fill="url(#bodyGrad)" stroke="#78350f" stroke-width="1.5"/>
+  <!-- inner highlight -->
+  <circle cx="56" cy="55" r="6" fill="#fbbf24" opacity="0.7"/>
+  <!-- core -->
+  <circle cx="60" cy="60" r="3" fill="#fef3c7"/>
+</svg>
