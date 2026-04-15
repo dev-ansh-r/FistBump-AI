@@ -4,6 +4,8 @@ credentials.json
 .env
 .env.local
 *.pem
+.claude/
+
 
 # ── Python ──────────────────────────────────────────────────────────────
 __pycache__/
