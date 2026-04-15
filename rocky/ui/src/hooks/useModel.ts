@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { api } from '../lib/api'
 
 export interface TensorInfo {
   name: string
@@ -55,7 +56,7 @@ async function pollUntilHealthy(maxMs = 8000) {
   const start = Date.now()
   while (Date.now() - start < maxMs) {
     try {
-      const r = await fetch('/api/health')
+      const r = await fetch(api('/api/health'))
       if (r.ok) return true
     } catch { /* ignore */ }
     await new Promise(r => setTimeout(r, 250))
@@ -82,7 +83,7 @@ export function useModel() {
     setLoading(true)
     setError(null)
     try {
-      const r = await fetch('/api/load', {
+      const r = await fetch(api('/api/load'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path }),
@@ -92,7 +93,7 @@ export function useModel() {
         throw new Error(txt || `Load failed (${r.status})`)
       }
       const summaryData: ModelSummary = await r.json()
-      const graphRes = await fetch('/api/graph')
+      const graphRes = await fetch(api('/api/graph'))
       const graphData: GraphData = await graphRes.json()
       setSummary(summaryData)
       setGraph(graphData)

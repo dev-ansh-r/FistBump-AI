@@ -75,10 +75,23 @@ First run: slow. Compiling everything. Be patient. Or don’t. It won’t go fas
 
 ### Build release
 
+The Python backend is bundled into the installer as a sidecar binary (PyInstaller),
+so end users don't need Python installed.
+
 ```bash
+# one-time: install PyInstaller into the same Python rocky is installed in
+pip install -e ".[sidecar]"
+
+# build the sidecar for your current platform
+python scripts/build_sidecar.py
+
+# build the Tauri installer (picks up the sidecar automatically)
 cd rocky/ui
 npx tauri build
 ```
+
+Rebuild the sidecar whenever Python code under `rocky/` changes. CI does this
+automatically — see [`.github/workflows/release.yml`](.github/workflows/release.yml).
 
 ## First-time setup
 

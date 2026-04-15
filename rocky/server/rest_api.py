@@ -17,7 +17,10 @@ app = FastAPI(title="Rocky Backend")
 # CORS only matters in dev mode (Vite on a different port). Tauri webview is same-origin.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:1420", "http://127.0.0.1:1420", "tauri://localhost"],
+    # Safe to allow any origin — the server only binds to 127.0.0.1. Tauri's
+    # webview origin varies by platform (`tauri://localhost`, `https://tauri.localhost`)
+    # so maintaining an allow-list would be fragile.
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )

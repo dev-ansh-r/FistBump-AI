@@ -1,32 +1,49 @@
 mod secrets;
 
-use std::process::{Child, Command, Stdio};
 use std::sync::Mutex;
 use tauri::{Manager, RunEvent};
+use tauri_plugin_shell::ShellExt;
+use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 
-struct BackendProcess(Mutex<Option<Child>>);
+struct BackendProcess(Mutex<Option<CommandChild>>);
 
-fn spawn_backend() -> Option<Child> {
-    // In dev: assumes `rocky-backend` is on PATH (installed via `pip install -e .`).
-    // In bundled release: future work — ship a PyInstaller exe as a sidecar binary.
-    let mut cmd = Command::new("rocky-backend");
-    cmd.arg("--port").arg("6070");
-    cmd.stdout(Stdio::null());
-    cmd.stderr(Stdio::null());
+fn spawn_backend(app: &tauri::AppHandle) -> Option<CommandChild> {
+    let sidecar = match app.shell().sidecar("rocky-backend") {
+        Ok(cmd) => cmd,
+        Err(e) => {
+            log::error!(
+                "Could not resolve rocky-backend sidecar: {e}. \
+                 For dev: run `python scripts/build_sidecar.py` once."
+            );
+            return None;
+        }
+    };
 
-    #[cfg(target_os = "windows")]
-    {
-        use std::os::windows::process::CommandExt;
-        cmd.creation_flags(0x08000000); // CREATE_NO_WINDOW
-    }
-
-    match cmd.spawn() {
-        Ok(child) => {
-            log::info!("rocky-backend started (pid {})", child.id());
+    match sidecar.args(["--port", "6070"]).spawn() {
+        Ok((mut rx, child)) => {
+            log::info!("rocky-backend sidecar started (pid {})", child.pid());
+            // Drain stdout/stderr so the pipe never blocks and we can surface errors
+            tauri::async_runtime::spawn(async move {
+                while let Some(event) = rx.recv().await {
+                    match event {
+                        CommandEvent::Stderr(bytes) => {
+                            log::info!("[backend] {}", String::from_utf8_lossy(&bytes).trim_end());
+                        }
+                        CommandEvent::Stdout(bytes) => {
+                            log::info!("[backend] {}", String::from_utf8_lossy(&bytes).trim_end());
+                        }
+                        CommandEvent::Terminated(payload) => {
+                            log::warn!("rocky-backend exited: {:?}", payload);
+                            break;
+                        }
+                        _ => {}
+                    }
+                }
+            });
             Some(child)
         }
         Err(e) => {
-            log::error!("Failed to start rocky-backend: {e}. Is `pip install -e .` done?");
+            log::error!("Failed to start rocky-backend sidecar: {e}");
             None
         }
     }
@@ -55,7 +72,8 @@ pub fn run() {
                         .build(),
                 )?;
             }
-            let child = spawn_backend();
+            let handle = app.handle().clone();
+            let child = spawn_backend(&handle);
             *app.state::<BackendProcess>().0.lock().unwrap() = child;
             Ok(())
         })
@@ -63,7 +81,7 @@ pub fn run() {
         .expect("error while running tauri application")
         .run(|app, event| {
             if let RunEvent::ExitRequested { .. } = event {
-                if let Some(mut child) = app.state::<BackendProcess>().0.lock().unwrap().take() {
+                if let Some(child) = app.state::<BackendProcess>().0.lock().unwrap().take() {
                     let _ = child.kill();
                     log::info!("rocky-backend stopped");
                 }

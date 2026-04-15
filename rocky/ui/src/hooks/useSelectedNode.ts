@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { NodeDetail } from './useModel'
+import { api } from '../lib/api'
 
 export function useSelectedNode() {
   const [selectedName, setSelectedName] = useState<string | null>(null)
@@ -11,7 +12,7 @@ export function useSelectedNode() {
       return
     }
     let cancelled = false
-    fetch(`/api/node?name=${encodeURIComponent(selectedName)}`)
+    fetch(api(`/api/node?name=${encodeURIComponent(selectedName)}`))
       .then(r => (r.ok ? r.json() : null))
       .then((d: NodeDetail | null) => { if (!cancelled) setNodeDetail(d) })
       .catch(() => { if (!cancelled) setNodeDetail(null) })

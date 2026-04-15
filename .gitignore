@@ -36,6 +36,13 @@ yarn-error.log*
 rocky/ui/src-tauri/target/
 rocky/ui/src-tauri/gen/schemas/
 rocky/ui/src-tauri/WixTools/
+# Built sidecar binaries — produced per-platform by scripts/build_sidecar.py
+rocky/ui/src-tauri/binaries/
+
+# PyInstaller artifacts
+build/
+dist/
+*.spec
 
 # Keep Cargo.lock — Rocky is an app, not a library, so locking deps is correct.
 !rocky/ui/src-tauri/Cargo.lock

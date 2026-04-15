@@ -60,8 +60,11 @@ jobs:
             patchelf \
             libssl-dev
 
-      - name: Install Python backend
-        run: pip install -e .
+      - name: Install Python backend + PyInstaller
+        run: pip install -e ".[sidecar]"
+
+      - name: Build sidecar binary
+        run: python scripts/build_sidecar.py
 
       - name: Install UI deps
         working-directory: rocky/ui

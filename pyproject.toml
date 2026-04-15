@@ -1,6 +1,6 @@
 [project]
 name = "rocky-ml"
-version = "0.2.0"
+version = "0.3.0"
 description = "Rocky — model introspection desktop assistant"
 requires-python = ">=3.10"
 
@@ -13,6 +13,9 @@ dependencies = [
     "rich>=13.0.0",
     "httpx>=0.27.0",
 ]
+
+[project.optional-dependencies]
+sidecar = ["pyinstaller>=6.0"]
 
 [project.scripts]
 rocky-backend = "rocky.cli:app"

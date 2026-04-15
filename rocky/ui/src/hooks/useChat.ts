@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from 'react'
 import { getApiKey } from '../lib/secrets'
 import type { RockyConfig } from '../lib/secrets'
 import { defaultModel, type ProviderId } from '../lib/providers'
+import { api } from '../lib/api'
 
 export interface ChatMessage {
   role: 'user' | 'assistant'
@@ -44,7 +45,7 @@ export function useChat(config: RockyConfig) {
     abortRef.current = ctrl
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch(api('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: ctrl.signal,

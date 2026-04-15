@@ -6,6 +6,16 @@
   "permissions": [
     "core:default",
     "dialog:default",
-    "shell:default"
+    "shell:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "binaries/rocky-backend",
+          "sidecar": true,
+          "args": ["--port", "6070"]
+        }
+      ]
+    }
   ]
 }
