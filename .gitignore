@@ -6,6 +6,7 @@ credentials.json
 *.pem
 .claude/
 test/
+tests/
 
 
 # ── Python ──────────────────────────────────────────────────────────────

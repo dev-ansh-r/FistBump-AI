@@ -1,6 +1,6 @@
 [package]
 name = "rocky"
-version = "0.3.3"
+version = "0.3.4"
 description = "Rocky — model introspection desktop assistant"
 authors = ["Devansh"]
 edition = "2021"

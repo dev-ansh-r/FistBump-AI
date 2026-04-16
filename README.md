@@ -28,8 +28,7 @@ Older builds: [all releases](https://github.com/dev-ansh-r/FistBump-AI/releases)
 
 ## Demo
 
-<!-- Replace the URL below with your YouTube, Loom, or GitHub-hosted video link -->
-[▶ Watch demo](https://github.com/dev-ansh-r/FistBump-AI/releases)
+![Rocky demo](images/demo.gif)
 
 ## Why
 

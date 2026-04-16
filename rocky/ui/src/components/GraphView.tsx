@@ -114,11 +114,56 @@ function filterGraph(
   const visibleIds = new Set(
     nodes.filter(n => !INFRA_OPS.has(n.data.op_type)).map(n => n.id),
   )
+
+  // Build adjacency for the full graph so we can trace through hidden nodes
+  const outAdj = new Map<string, string[]>()
+  for (const e of edges) {
+    if (!outAdj.has(e.source)) outAdj.set(e.source, [])
+    outAdj.get(e.source)!.push(e.target)
+  }
+
+  // For each hidden node, BFS forward until we hit a visible node
+  function visibleSuccessors(startId: string): string[] {
+    const result: string[] = []
+    const queue = outAdj.get(startId) ?? []
+    const seen = new Set<string>()
+    const stack = [...queue]
+    while (stack.length) {
+      const id = stack.pop()!
+      if (seen.has(id)) continue
+      seen.add(id)
+      if (visibleIds.has(id)) {
+        result.push(id)
+      } else {
+        for (const nxt of outAdj.get(id) ?? []) stack.push(nxt)
+      }
+    }
+    return result
+  }
+
   const visibleNodes = nodes.filter(n => visibleIds.has(n.id))
-  const visibleEdges = edges.filter(
-    e => visibleIds.has(e.source) && visibleIds.has(e.target),
-  )
-  return { nodes: visibleNodes, edges: visibleEdges }
+
+  // Keep direct edges between visible nodes + bypass edges through hidden nodes
+  const edgeSet = new Set<string>()
+  const bypassEdges: RockyEdge[] = []
+
+  for (const e of edges) {
+    if (visibleIds.has(e.source) && visibleIds.has(e.target)) {
+      const key = `${e.source}->${e.target}`
+      if (!edgeSet.has(key)) { edgeSet.add(key); bypassEdges.push(e) }
+    } else if (visibleIds.has(e.source) && !visibleIds.has(e.target)) {
+      // source is visible, target is hidden — find next visible nodes
+      for (const dst of visibleSuccessors(e.target)) {
+        const key = `${e.source}->${dst}`
+        if (!edgeSet.has(key)) {
+          edgeSet.add(key)
+          bypassEdges.push({ id: key, source: e.source, target: dst })
+        }
+      }
+    }
+  }
+
+  return { nodes: visibleNodes, edges: bypassEdges }
 }
 
 function applyDagreLayout(
@@ -127,7 +172,7 @@ function applyDagreLayout(
 ): { nodes: Node[]; edges: Edge[] } {
   const g = new dagre.graphlib.Graph()
   g.setDefaultEdgeLabel(() => ({}))
-  g.setGraph({ rankdir: 'TB', nodesep: 40, ranksep: 60 })
+  g.setGraph({ rankdir: 'TB', nodesep: 18, ranksep: 55, align: 'UL' })
 
   nodes.forEach(n => g.setNode(n.id, { width: NODE_W, height: NODE_H }))
   edges.forEach(e => g.setEdge(e.source, e.target))
