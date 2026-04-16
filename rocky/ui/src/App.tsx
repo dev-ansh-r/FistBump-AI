@@ -79,6 +79,8 @@ export default function App() {
                   selectedName={selectedName}
                   searchQuery={searchQuery}
                   onNodeClick={selectNode}
+                  inputs={summary.inputs}
+                  outputs={summary.outputs}
                 />
               </div>
               {nodeDetail && (

@@ -8,7 +8,28 @@ A desktop assistant for understanding neural network architectures — paper-gro
 
 Short sentences. No filler. Dry humour. Occasional: *fist my bump*. Frequent: *dirty, dirty, dirty* when tensors misbehave.
 
+[![Latest Release](https://img.shields.io/github/v/release/dev-ansh-r/rocky?style=flat-square&label=download&color=d97706)](https://github.com/dev-ansh-r/rocky/releases/latest)
+
 </div>
+
+## Download
+
+Pre-built installers — no Python, no Rust, no nonsense.
+
+| Platform | File | Notes |
+| -------- | ---- | ----- |
+| Windows | `.msi` or `.exe` | x86-64. Run installer, open Rocky. |
+| macOS | `.dmg` | Apple Silicon (M1+). Drag to Applications. |
+| Linux | `.AppImage` or `.deb` | x86-64. AppImage: `chmod +x`, run directly. |
+
+→ **[Releases page](https://github.com/dev-ansh-r/rocky/releases/latest)**
+
+Older builds: [all releases](https://github.com/dev-ansh-r/rocky/releases).
+
+## Demo
+
+<!-- Replace the URL below with your YouTube, Loom, or GitHub-hosted video link -->
+[▶ Watch demo](https://github.com/dev-ansh-r/rocky/releases)
 
 ## Why
 
