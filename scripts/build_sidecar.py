@@ -14,6 +14,7 @@ on each platform. Run from the repo root:
 
 from __future__ import annotations
 
+import argparse
 import platform
 import shutil
 import subprocess
@@ -47,7 +48,14 @@ def rust_target_triple() -> str:
 
 
 def main() -> int:
-    triple = rust_target_triple()
+    parser = argparse.ArgumentParser(description="Build the rocky-backend sidecar binary.")
+    parser.add_argument(
+        "--target",
+        help="Rust target triple to name the output for (defaults to rustc host). "
+             "CI should pass this explicitly to avoid host/target mismatch surprises.",
+    )
+    args = parser.parse_args()
+    triple = args.target or rust_target_triple()
     is_windows = sys.platform.startswith("win")
     ext = ".exe" if is_windows else ""
     final_name = f"rocky-backend-{triple}{ext}"
