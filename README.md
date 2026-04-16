@@ -26,9 +26,18 @@ Pre-built installers — no Python, no Rust, no nonsense.
 
 Older builds: [all releases](https://github.com/dev-ansh-r/FistBump-AI/releases).
 
-## Demo
+## UI
 
-![Rocky demo](images/demo.gif)
+<table>
+<tr>
+<td><img src="images/demo.gif" alt="Graph view" /></td>
+<td><img src="images/chatdemo.gif" alt="Chat demo" /></td>
+</tr>
+<tr>
+<td align="center">Graph · node inspector · I/O panel</td>
+<td align="center">Click node → ask Rocky why</td>
+</tr>
+</table>
 
 ## Why
 
